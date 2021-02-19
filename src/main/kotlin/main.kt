@@ -1,32 +1,42 @@
 fun main(args: Array<String>) {
 
-    val bancoDeNomes = BancoDeNomes()
-
-    bancoDeNomes.add("Chicória")
-    bancoDeNomes.add("Netta")
-    BancoDeNomes().add("Iujo") //como é um singleton não faz nova instância
-    bancoDeNomes.add("Yuri")
-
-
-    val listaNomes = bancoDeNomes.nomes //esta lista é uma cópia imutável
-    bancoDeNomes.add("Jack")
+    val elenco: MutableMap<String, String> = mutableMapOf(Pair("H Ford", "Kylo Ren"),
+        "C Fisher" to "Leia",
+        "M Hamill" to "Luke",
+        "A Guiness" to "Obi-Wan"
+        )
 
 
-    println(bancoDeNomes.nomes) //puxa os dados do Singleton
-    println(listaNomes) //somente o snapshot da lista no instante da cópia
-}
+    //adicionando um elemento:
+    elenco.put("A Daniels", "C-3PO")
+    elenco["P Mayhew"] = "Chewbacca"
+    elenco.putIfAbsent("P Mayhew", "Chewbacca") // não adiciona
 
-class BancoDeNomes {
+    //removendo elemento
+//    elenco.remove("H Ford")
 
-    val nomes: Collection<String> get() = dados.toList()
+    //quando passa os dois valores somente remove se tanto chave quanto valor corresponderem à entrada
+    elenco.remove("H Ford", "Han Solo")
 
-    fun add(nome: String) {
-        dados.add(nome)
+    //modificando um valor usando a chave
+    elenco["H Ford"] = "Han Solo"
+
+    //essas duas sintaxes são intercambiáveis:
+    elenco.forEach { ator, personagem ->
+        println("$ator como $personagem")
     }
 
-    companion object{
-        private val dados = mutableListOf<String>()
+    println("****")
+    for (papel: Map.Entry<String, String> in elenco){
+        println("${papel.key} como ${papel.value}")
     }
+
+    val papel: String? = elenco["A Guiness"]
+    papel?.let {
+        println("Papel: $it")
+    }
+
+
 
 
 
@@ -34,24 +44,4 @@ class BancoDeNomes {
 }
 
 
-fun testaListas() {
-    val nomes: Collection<String> = setOf(
-        "Han",
-        "Chewie",
-        "Mando",
-        "Obi Wan",
-        "Moff Tarkin"
-    )
 
-    println(nomes)
-
-    val listaOrdenada = nomes.sortedBy { it.length }.reversed()
-
-
-    for (n in listaOrdenada) {
-        println(n)
-    }
-
-    println("O nome Han está na lista: ${nomes.contains("Han")}")
-    println("Tamnaho da coleção: ${nomes.size}")
-}
